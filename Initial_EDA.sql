@@ -1,14 +1,10 @@
-
 USE Project1
---Drop procedure dbo.bonds;
-Select Distinct(Year(Sale_date)) from California order by Year(Sale_date) ;
+
 -- Timeline of recorded dataset
 SELECT max(Sale_date) AS start_date, 
 MIN(Sale_date) AS end_date 
 FROM California;
 
-Select Purpose, Year(Sale_date), Year(Final_Maturity_Date), AVG(DATEDIFF(day, Sale_date, Final_Maturity_Date  )) as Average_bond_length 
- from California where Purpose = 'Single-Family Housing' AND Year(Sale_date) = '1985' AND Year(Final_Maturity_Date) != '1900' group by Purpose, Year(Sale_date), Year(Final_Maturity_Date);
 -- Stored Procedure 1 to see bonds by issuer and purpose
 
 GO
@@ -32,7 +28,7 @@ BEGIN
     EXEC sp_executesql @sql;
 END;
 
-EXEC bonds @para = 'Purpose'; -- Table 1
+EXEC bonds @para = 'Purpose'  ; -- Table 1
 EXEC bonds @para = 'Issuer'; -- Table 2
 
 -- Stored procedure 2 to see famous underwriters and gurantors 
@@ -75,8 +71,7 @@ Select Principal_Amount, Debt_Policy, Sale_Date, S_and_P_Rating
 from California
 where S_and_P_Rating NOT LIKE '%A%' 
 
--- Average expense in issuing a bond (Do different for TIC NIC) (Table 6)
-
+-- Average expense in issuing a bond (Do different for TIC NIC) (Table 6)Create table BondIssueAnalysis As 
 SELECT 
 purpose,
 year(Sale_Date) as Years,
@@ -141,3 +136,5 @@ WITH RankedTrustees AS (
 SELECT Issuer, Trustee, Number_of_bonds
 FROM RankedTrustees
 WHERE RowNum <= 5;
+
+
